@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:api')->get('/limitefighter/v1/faixas/{id?}','FaixaController@index');
+Route::post('/limitefighter/v1/signin','UserController@signin');
+
+Route::post('/signup', 'AuthController@signup');
+
+Route::post('/signin', 'AuthController@signin');
+Route::post('/signout', 'AuthController@signout');

@@ -12,9 +12,21 @@ class FaixaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id = null)
     {
-        //
+        if ($id == null) {
+            return $this->list();
+        } else {
+            return $this->show($id);
+        }
+    }
+
+    public function list() {
+        return Faixa::orderBy('id','asc')->get();
+    }
+
+    public function showBy($id) {
+        return Faixa::find($id);
     }
 
     /**
@@ -35,7 +47,15 @@ class FaixaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $obj = new Faixa;
+
+        $obj->codigo_interno = $request->input('codigo_interno');
+        $obj->cor = $request->input('cor');
+        $obj->descricao = $request->input('descricao');
+
+        $obj->save();
+
+        return 'Faixa adicionada na base de dados com o id: ' . $obj->id;
     }
 
     /**
@@ -69,7 +89,19 @@ class FaixaController extends Controller
      */
     public function update(Request $request, Faixa $faixa)
     {
-        //
+        $faixa->codigo_interno = $request->input('codigo_interno');
+        $faixa->cor = $request->input('cor');
+        $faixa->descricao = $request->input('descricao');
+
+        $faixa->save();
+
+        return 'Faixa #' . $faixa->id . ' atualizada na base de dados com sucesso.';
+    }
+
+    public function updateBy(Request $request, $id)
+    {
+        $obj = Faixa::find($id);
+        return $this->update($request,$obj);
     }
 
     /**
@@ -80,6 +112,14 @@ class FaixaController extends Controller
      */
     public function destroy(Faixa $faixa)
     {
-        //
+        $faixa->delete();
+    }
+
+    public function destroyBy($id)
+    {
+        $obj = Faixa::find($id);
+        $this->destroy($obj);
+
+        return 'Faixa #' . $id . ' excluída com sucesso.'; 
     }
 }
